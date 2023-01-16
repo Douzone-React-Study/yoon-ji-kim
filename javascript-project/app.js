@@ -1,3 +1,5 @@
+const saveBtn = document.getElementById("save");
+const textInput = document.getElementById("text");
 const fileInput = document.getElementById("file");
 const eraseBtn = document.getElementById("eraser-btn");
 const destroyBtn = document.getElementById("destroy-btn");
@@ -14,6 +16,7 @@ canvas.width = 400;
 canvas.height = 400;
 
 ctx.lineWidth =lineWidth.value;
+ctx.lineCap = "round";
 
 ctx.moveTo(200, 200);
 
@@ -86,6 +89,28 @@ function onFileChange(event){
     };
 }
 
+function onDoubleClick(event){
+    const text = textInput.value;
+    if(text !==""){
+        ctx.save(); //현재 상태,색상,스타일 등 모든 것ㅇ르 저장
+        ctx.lineWidth = 1;
+        ctx.font ="48px serif"
+        ctx.fillText(text, event.offsetX, event.offsetY);
+        ctx.restore();
+
+    }
+}
+
+function onSaveClick() {
+    const url = canvas.toDataURL();
+    const a = document.createElement("a")
+    a.href = url
+    a.download = "myDrawing.png"
+    a.click();
+
+}
+
+canvas.addEventListener("dblclick", onDoubleClick);
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", startPainting);
 canvas.addEventListener("mouseup", cancelPainting);
@@ -98,3 +123,4 @@ modeBtn.addEventListener("click", onModeClick);
 destroyBtn.addEventListener("click", onDestroyClick);
 eraseBtn.addEventListener("click", onEraseClick);
 fileInput.addEventListener("change", onFileChange);
+saveBtn.addEventListener("click", onSaveClick);
